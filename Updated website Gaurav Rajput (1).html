@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Shield Academy | Elite Cyber Command</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #00ffcc;
+            --secondary: #0a1128;
+            --bg-dark: #020617;
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --text-glow: 0 0 15px rgba(0, 255, 204, 0.7);
+            --accent-glow: 0 0 30px rgba(0, 255, 204, 0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; scroll-behavior: smooth; }
+        
+        #vanta-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+
+        body { background-color: var(--bg-dark); color: #ffffff; line-height: 1.6; overflow-x: hidden; }
+        
+        nav { background: rgba(10, 17, 40, 0.9); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(20px); box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+        .logo-text { color: var(--primary); font-size: 26px; font-weight: 900; letter-spacing: 2px; text-shadow: var(--text-glow); text-decoration: none; text-transform: uppercase; }
+        .nav-links a { color: #cbd5e1; text-decoration: none; margin-left: 25px; font-weight: 600; transition: 0.3s; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-links a:hover { color: var(--primary); text-shadow: var(--text-glow); }
+
+        .hero { height: 75vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; position: relative; }
+        .hero h1 { font-size: 5rem; color: var(--primary); text-shadow: 0 0 40px rgba(0,255,204,0.8); margin-bottom: 20px; text-transform: uppercase; font-weight: 900; line-height: 1; }
+        .hero p { font-size: 1.5rem; color: #ffffff; max-width: 800px; font-weight: 300; background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 50px; }
+
+        .container { max-width: 1300px; margin: 80px auto; padding: 0 30px; position: relative; z-index: 1; }
+        .section-title { text-align: center; color: var(--primary); font-size: 3rem; margin-bottom: 60px; text-transform: uppercase; letter-spacing: 4px; text-shadow: var(--text-glow); position: relative; display: inline-block; left: 50%; transform: translateX(-50%); }
+        .section-title::after { content: ''; position: absolute; bottom: -15px; left: 0; width: 100%; height: 3px; background: var(--primary); box-shadow: var(--text-glow); }
+        
+        .founder-card { display: flex; align-items: center; gap: 50px; background: var(--card-bg); padding: 50px; border-radius: 30px; border: 1px solid rgba(0,255,204,0.3); box-shadow: var(--accent-glow); margin-bottom: 80px; backdrop-filter: blur(10px); }
+        .founder-img-container { position: relative; width: 250px; height: 300px; border-radius: 20px; overflow: hidden; border: 3px solid var(--primary); box-shadow: var(--text-glow); flex-shrink: 0; }
+        .founder-img { width: 100%; height: 100%; object-fit: cover; }
+        .founder-details h2 { color: var(--primary); font-size: 2.5rem; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; }
+        .founder-details .title { font-size: 1.3rem; color: #e2e8f0; font-weight: 600; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+
+        .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+        .course-card { background: var(--card-bg); border-radius: 25px; border: 1px solid rgba(255,255,255,0.08); transition: all 0.5s ease; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+        .course-card:hover { transform: translateY(-15px) scale(1.02); border-color: var(--primary); box-shadow: 0 15px 50px rgba(0, 255, 204, 0.3); }
+        .course-icon-container { width: 100%; height: 180px; display: flex; justify-content: center; align-items: center; background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(10,17,40,0.8) 100%); position: relative; border-bottom: 1px solid rgba(0,255,204,0.1); }
+        /* Professional dynamic logos */
+        .course-logo { width: 120px; height: auto; filter: drop-shadow(0 0 10px var(--primary)); }
+        
+        .course-info { padding: 30px; display: flex; flex-direction: column; flex-grow: 1; }
+        .course-info h3 { color: var(--primary); font-size: 1.8rem; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; }
+        .deep-details { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
+        .deep-details ul { list-style: none; color: #cbd5e1; font-size: 0.95rem; }
+        .deep-details ul li::before { content: '⚡'; color: var(--primary); margin-right: 10px; }
+        .view-btn { width: 100%; padding: 15px; background: transparent; color: var(--primary); border: 2px solid var(--primary); border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.4s; font-size: 1.1rem; text-transform: uppercase; }
+        .view-btn:hover { background: var(--primary); color: #000; box-shadow: var(--text-glow); }
+
+        /* Original contact section restored */
+        .contact-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
+        .contact-card { background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid rgba(0,255,204,0.2); text-align: center; }
+        .contact-card h3 { color: var(--primary); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .contact-card p { font-size: 1.1rem; color: #e2e8f0; }
+
+        .admission-box { background: var(--card-bg); padding: 50px; border-radius: 30px; border: 2px solid var(--primary); box-shadow: var(--accent-glow); max-width: 700px; margin: 0 auto; backdrop-filter: blur(10px); }
+        input, select, textarea { width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(2, 6, 23, 0.9); color: white; font-size: 1.1rem; }
+        .btn-submit { background: var(--primary); color: #000; font-weight: 900; border: none; padding: 18px; width: 100%; border-radius: 12px; cursor: pointer; text-transform: uppercase; font-size: 1.3rem; letter-spacing: 2px; transition: 0.3s; }
+        .btn-submit:hover { box-shadow: 0 0 30px var(--primary); transform: scale(1.02); }
+
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); }
+        .modal-content { background: var(--secondary); margin: 5% auto; padding: 40px; border: 2px solid var(--primary); width: 90%; max-width: 900px; border-radius: 25px; position: relative; box-shadow: var(--accent-glow); max-height: 85vh; overflow-y: auto; }
+        .close { color: var(--primary); position: absolute; right: 25px; top: 15px; font-size: 40px; cursor: pointer; }
+        .syllabus-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .s-item { background: rgba(0, 255, 204, 0.08); padding: 15px; border-radius: 10px; border-left: 4px solid var(--primary); color: #e2e8f0; }
+
+        footer { text-align: center; padding: 60px 20px; background: rgba(10, 17, 40, 0.95); border-top: 2px solid var(--primary); position: relative; z-index: 1; }
+        .footer-details { margin-top: 20px; color: #cbd5e1; font-size: 0.9rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+        .whatsapp-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; color: white; padding: 18px 30px; border-radius: 50px; text-decoration: none; font-weight: 900; z-index: 1000; box-shadow: 0 5px 20px rgba(0,0,0,0.4); transition: 0.3s; }
+        .whatsapp-float:hover { transform: scale(1.1); }
+    </style>
+</head>
+<body>
+
+<div id="vanta-bg"></div>
+
+<nav>
+    <a href="#" class="logo-text">CYBER SHIELD</a>
+    <div class="nav-links">
+        <a href="#about">Founder</a>
+        <a href="#courses">Courses</a>
+        <a href="#faq">FAQs</a> <a href="#admission">Register</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <h1>BECOMING A CYBER SECURITY EXPERT </h1>
+    <p>Bureau of Skill Development & Education | Professional Training & Services</p>
+</section>
+
+<section id="about" class="container">
+    <div class="founder-card">
+        <div class="founder-img-container">
+            <img src="image for website fundation .jpeg" alt="Gaurav Kumar" class="founder-img">
+        </div>
+        <div class="founder-details">
+            <h2>Gaurav Kumar</h2>
+            <p class="title">Cyber Security Expert | Founder Of Cyber Shield Academy</p>
+            <p>Master of digital warfare and forensic defense. Under Gaurav Kumar's command, Cyber Shield Academy delivers battle-tested training environments. Launch your elite career here.</p>
+        </div>
+    </div>
+</section>
+
+<section id="courses" class="container">
+    <h2 class="section-title">Specialized Programs</h2>
+    <div class="course-grid">
+        <div class="course-card">
+            <div class="course-icon-container">
+                <img src="https://img.icons8.com/neon/96/shield.png" class="course-logo" alt="BCC">
+            </div>
+            <div class="course-info">
+                <h3>BCC (Foundation)</h3>
+                <div class="deep-details"><ul><li>Linux Command Line</li><li>Network Architecture</li><li>Active Directory</li></ul></div>
+                <button class="view-btn" onclick="openModal('bcc')">Full Curriculum</button>
+            </div>
+        </div>
+        <div class="course-card">
+            <div class="course-icon-container">
+                <img src="https://img.icons8.com/neon/96/spy.png" class="course-logo" alt="CEH Certified Ethical Hacker">
+            </div>
+            <div class="course-info">
+                <h3>Ethical Hacker (CEH)</h3>
+                <div class="deep-details"><ul><li>Metasploit Mastery</li><li>Web App Pentesting</li><li>IoT Hacking</li></ul></div>
+                <button class="view-btn" onclick="openModal('ceh')">Full Curriculum</button>
+            </div>
+        </div>
+        <div class="course-card">
+            <div class="course-icon-container">
+                <img src="https://img.icons8.com/neon/96/search.png" class="course-logo" alt="CHFI Computer Hacking Forensic Investigator">
+            </div>
+            <div class="course-info">
+                <h3>CHFI Forensics</h3>
+                <div class="deep-details"><ul><li>Memory Forensics</li><li>Evidence Recovery</li><li>Network Tracing</li></ul></div>
+                <button class="view-btn" onclick="openModal('chfi')">Full Curriculum</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="faq" class="container">
+    <h2 class="section-title">Common Queries (FAQs)</h2>
+    <div class="founder-card" style="display: block; padding: 30px;">
+        <div class="deep-details">
+            <ul style="color: #cbd5e1; font-size: 1.1rem; line-height: 2;">
+                <li><strong>⚡ Prerequisites required for these courses?</strong><br>
+                <span style="opacity: 0.8; font-size: 1rem; padding-left: 20px; display: block;">BCC is beginner-friendly. CEH/CHFI benefit from BCC foundation knowledge.</span></li>
+                
+                <li><strong>⚡ Do you provide job placement support?</strong><br>
+                <span style="opacity: 0.8; font-size: 1rem; padding-left: 20px; display: block;">Yes, we offer complete guidance and placement assistance after successful certification.</span></li>
+                
+                <li><strong>⚡ What is the course duration?</strong><br>
+                <span style="opacity: 0.8; font-size: 1rem; padding-left: 20px; display: block;">It varies. Generally, BCC is 2 months, and CEH is 2.5 months.</span></li>
+                
+                <li><strong>⚡ Are the classes online or offline?</strong><br>
+                <span style="opacity: 0.8; font-size: 1rem; padding-left: 20px; display: block;">We offer both flexible online live sessions and in-person training at our HQ.</span></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section id="contact" class="container">
+    <h2 class="section-title">HQ & Reach</h2>
+    <div class="contact-info-grid">
+        <div class="contact-card">
+            <h3>📍 Academy Address</h3>
+            <p>Near Gud Mandi, Block Road<br>Shamli, Uttarpradesh - 247776</p>
+        </div>
+        <div class="contact-card">
+            <h3>📞 Direct Hotline</h3>
+            <p>+91 7827550449</p>
+            <p style="font-size: 0.9rem; color: var(--primary);">Available for Admission & Support</p>
+        </div>
+    </div>
+</section>
+
+<section id="admission" class="container">
+    <h2 class="section-title">Initiate Registration</h2>
+    <div class="admission-box">
+        <form>
+            <input type="text" placeholder="Full Command Name" required>
+            <input type="tel" placeholder="WhatsApp Number" required>
+            <select required>
+                <option value="">Select Specialization</option>
+                <option>BCC (Foundation)</option>
+                <option>CEH (Ethical Hacking)</option>
+                <option>CHFI (Forensics)</option>
+            </select>
+            <button type="submit" class="btn-submit">Submit Registration</button>
+        </form>
+    </div>
+</section>
+
+<div id="sModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="m-body"></div>
+    </div>
+</div>
+
+<a href="https://wa.me/917827550449" class="whatsapp-float" target="_blank">Chat with Command</a>
+
+<footer>
+    <h2 style="color: var(--primary); margin-bottom: 10px;">CYBER SHIELD ACADEMY</h2>
+    <p>Near Gud Mandi, Block Road, Shamli, UP - 247776</p>
+    <p>Contact: +91 7827550449</p>
+    <div class="footer-details">
+        <p>&copy; 2026 Cyber Shield Academy | Bureau of Skill Development & Education</p>
+    </div>
+</footer>
+
+<script>
+    VANTA.NET({
+      el: "#vanta-bg",
+      mouseControls: true,
+      touchControls: true,
+      minHeight: 200.00,
+      scale: 1.00,
+      color: 0x00ffcc,
+      backgroundColor: 0x020617,
+      points: 13.00
+    });
+
+    const sData = {
+        'bcc': { t: "BCC Syllabus", i: ["Intro to BIOS", "Linux CLI", "Networking", "Windows Hardening"] },
+        'ceh': { t: "CEH Syllabus", i: ["Nmap Scanning", "Metasploit", "SQL Injection", "WiFi Hacking"] },
+        'chfi': { t: "CHFI Syllabus", i: ["Digital Evidence", "Data Recovery", "Registry Forensics", "Mobile Analysis"] }
+    };
+
+    function openModal(id) {
+        const d = sData[id];
+        let h = `<h2 style="color:var(--primary); text-align:center; margin-bottom:20px;">${d.t}</h2><div class="syllabus-grid">`;
+        d.i.forEach(x => { h += `<div class="s-item">${x}</div>`; });
+        h += `</div>`;
+        document.getElementById('m-body').innerHTML = h;
+        document.getElementById('sModal').style.display = "block";
+    }
+    function closeModal() { document.getElementById('sModal').style.display = "none"; }
+</script>
+
+</body>
+</html>
